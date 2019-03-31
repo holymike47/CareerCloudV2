@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarrerCloudV2", "CarrerCloudV2\CarrerCloudV2.csproj", "{907AAC7A-E360-4AB6-BC85-A4A1AA38C4D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarrerCloudV2.Tests", "CarrerCloudV2.Tests\CarrerCloudV2.Tests.csproj", "{0B00AC93-75C6-4889-B1FF-A20DAAD3F8CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{907AAC7A-E360-4AB6-BC85-A4A1AA38C4D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{907AAC7A-E360-4AB6-BC85-A4A1AA38C4D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{907AAC7A-E360-4AB6-BC85-A4A1AA38C4D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{907AAC7A-E360-4AB6-BC85-A4A1AA38C4D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B00AC93-75C6-4889-B1FF-A20DAAD3F8CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B00AC93-75C6-4889-B1FF-A20DAAD3F8CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B00AC93-75C6-4889-B1FF-A20DAAD3F8CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B00AC93-75C6-4889-B1FF-A20DAAD3F8CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D2CA004-EE72-4EEB-AA7B-3A8D4522B1A3}
+	EndGlobalSection
+EndGlobal
