@@ -1,0 +1,36 @@
+﻿@model CarrerCloudV2.Models.CompanyJobViewModel
+
+<div>
+    <h4>Job Details</h4>
+    <hr />
+    <h1></h1>
+
+    <h4>
+        @Html.DisplayFor(model => model.Title)
+    </h4>
+
+    <p style="width:70%">
+        @Html.DisplayFor(model => model.Description)
+        <hr />
+    </p>
+    <h4>Skills</h4>
+    @Html.DisplayFor(model => model.Skill1)<br />
+    @Html.DisplayFor(model => model.Skill2)<br />
+    @Html.DisplayFor(model => model.Skill3)<br />
+    @Html.DisplayFor(model => model.Skill4)<br />
+    @Html.DisplayFor(model => model.Skill5)
+    <hr />
+    <section>
+        <h4>Education</h4>
+        @Html.DisplayFor(model => model.Major1)<br />
+        @Html.DisplayFor(model => model.Major2)<br />
+        @Html.DisplayFor(model => model.Major3)<br />
+        @Html.DisplayFor(model => model.Major4)<br />
+        @Html.DisplayFor(model => model.Major5)<br />
+    </section>
+    <small>Posted: @Model.PostedDate.ToShortDateString() </small>
+    
+    <button>@Html.ActionLink("Apply", "Apply", new { id = Model.Id })</button>
+
+</div>
+

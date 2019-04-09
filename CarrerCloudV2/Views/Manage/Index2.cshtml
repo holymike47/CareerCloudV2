@@ -1,0 +1,83 @@
+﻿@using CareerCloud.Pocos;
+@model CarrerCloudV2.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+    CompanyProfilePoco poco = ViewBag.poco;
+   
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <section>
+                    [
+                    @if (Model.HasPassword)
+                    {
+                        @Html.ActionLink("Change your password", "ChangePassword")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword")
+                    }
+                    ]
+
+
+                    <section>
+                        @Html.Partial("_CompanyProfile", poco)
+                    </section>
+                    
+                    <section>
+                        @{
+                            CompanyDescriptionPoco des = poco.CompanyDescriptions.FirstOrDefault();
+                            if (des == null)
+                            {
+                                @:Please complete your company location <br />
+                                                                        <button class="btn-light">@Html.ActionLink("Enter Location", "NewDescription", "CompanyDescription", new { id = poco.Id }, null)</button>
+                            }
+                            else
+                            {
+                                @Html.Partial("_CompanyDescription", des)
+                            }
+                        }
+
+                    </section>
+
+                </section>
+            </div>
+            <div class="col-md-6">
+                <p>Manage Jobs</p>
+
+                <button>@Html.ActionLink("Post Job", "PostJob", "CompanyJob", new { id = poco.Id }, null)</button><br />
+                <button>@Html.ActionLink("Posted Job", "PostedJobs", "CompanyJob", new { id = poco.Id }, null)</button>
+            </div>
+        </div><hr />
+        <div class="container">
+            <section>
+                @{
+                    IEnumerable<CompanyLocationPoco> locs = poco.CompanyLocations;
+                    if (locs == null || locs.Count() == 0)
+                    {
+                        @:Please add your company locations <br />
+                        <button class="btn-light">@Html.ActionLink("Enter Location", "NewLocation", "CompanyLocation", new { id = poco.Id }, null)</button>
+
+                    }
+                    else
+                    {
+                        @Html.Partial("_CompanyLocation", locs)
+                        <button class="btn-light">@Html.ActionLink("Add Location", "NewLocation", "CompanyLocation", new { id = poco.Id }, null)</button>
+                    }
+                }
+            </section>
+        </div>
+              
+        
+
+    </div>
+    
+    
+
+</div>

@@ -7,6 +7,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CarrerCloudV2.Models;
+using CareerCloud.BusinessLogicLayer;
+using CareerCloud.DataAccessLayer;
+using CareerCloud.EntityFrameworkDataAccess;
+using CareerCloud.Pocos;
 
 namespace CarrerCloudV2.Controllers
 {
@@ -64,6 +68,7 @@ namespace CarrerCloudV2.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -72,7 +77,24 @@ namespace CarrerCloudV2.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
-            return View(model);
+
+            ApplicantProfilePoco poco = new ApplicantProfileLogic(new EFGenericRepository<ApplicantProfilePoco>())
+                                        .Get(Guid.Parse(userId));
+            
+            if (poco != null)
+            {
+                ViewBag.poco = poco;
+                return View(model);
+            }
+                
+            else
+            {
+                CompanyProfilePoco poco2 = new CompanyProfileLogic(new EFGenericRepository<CompanyProfilePoco>())
+                                        .Get(Guid.Parse(userId));
+                ViewBag.poco = poco2;
+                return View("Index2", model);
+            }
+                
         }
 
         //

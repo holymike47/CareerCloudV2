@@ -1,0 +1,120 @@
+﻿@model CarrerCloudV2.Models.CompanyJobViewModel
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Post Job</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Company)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <textarea style="width:80%;" name="@nameof(Model.Description)" id="@nameof(Model.Description)"></textarea>
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        <h3>Skills</h3>
+
+        <table class="table table-borderless table-light table-">
+            <tr>
+                <th>Skill</th>
+                <th>Skill Level</th>
+                <th>Importance</th>
+            </tr>
+
+
+            @for (int i = 1; i <= 5; i++)
+            {
+                var s = "Skill" + i;
+                var sl = "SkillLevel" + i;
+                var im = "Importance" + i;
+
+                <tr> 
+                    <td><input name="@s" /></td>
+                    <td>
+                        <input type="radio" name="@sl" value="1" checked />
+                        <input type="radio" name="@sl" value="2" />
+                        <input type="radio" name="@sl" value="3" />
+                        <input type="radio" name="@sl" value="4" />
+                        <input type="radio" name="@sl" value="5" />
+                    </td>
+                    <td>
+                        <input type="radio" name="@im" value="1" checked />
+                        <input type="radio" name="@im" value="2" />
+                        <input type="radio" name="@im" value="3" />
+                        <input type="radio" name="@im" value="4" />
+                        <input type="radio" name="@im" value="5" />
+                    </td>
+            </tr>
+
+
+
+
+            }
+
+        </table>
+    </div>
+    
+    <hr />
+
+    <div class="form-group">
+        <h3 >Major</h3>
+        <table class="table table-borderless table-light table-">
+            <tr>
+                <th>Major</th>
+                <th>Importance</th>
+            </tr>
+
+            @for (int i = 1; i <= 5; i++)
+            {
+                var m = "Major" + i;
+                var mi = "MajorImportance" + i;
+
+           <tr>
+                <td><input name="@m" /></td>
+                <td>
+                    <input type="radio" name="@mi" value="1" checked />
+                    <input type="radio" name="@mi" value="2" />
+                    <input type="radio" name="@mi" value="3" />
+                    <input type="radio" name="@mi" value="4" />
+                    <input type="radio" name="@mi" value="5" />
+                    </td>
+               </tr>
+            }
+
+               </table>
+</div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Post" class="btn btn-dark" />
+            </div>
+        </div>
+    </div>
+}
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

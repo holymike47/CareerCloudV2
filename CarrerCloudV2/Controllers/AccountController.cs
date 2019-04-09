@@ -9,17 +9,25 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CarrerCloudV2.Models;
+using CareerCloud.BusinessLogicLayer;
+using CareerCloud.DataAccessLayer;
+using CareerCloud.EntityFrameworkDataAccess;
+using CareerCloud.Pocos;
 
 namespace CarrerCloudV2.Controllers
 {
+    
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly ApplicantProfileLogic _logic;
+        private readonly CareerCloudContext ctx = new CareerCloudContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public AccountController()
         {
+            _logic = new ApplicantProfileLogic(new EFGenericRepository<ApplicantProfilePoco>());
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -153,17 +161,39 @@ namespace CarrerCloudV2.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                switch (model.IsCompany)
+                {
+                    case "applicant":
+                        ctx.ApplicantProfile.Add(new ApplicantProfilePoco()
+                        {
+                            Id = Guid.Parse(user.Id),
+                            Login = user.Email,
+                            Country = "CAN"
+                        });
+                        break;
+                    case "company":
+                        ctx.CompanyProfile.Add(new CompanyProfilePoco() {
+                            Id = Guid.Parse(user.Id),
+                            RegistrationDate = DateTime.Now
+                        });
+                        break;
+                }
+                
+                ctx.SaveChanges();
+                   
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    //  Comment the following line to prevent log in until the user is confirmed.
+                    //  await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                    return RedirectToAction("Index", "Home");
+                    string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
+                    ViewBag.url = callbackUrl;
+
+                    ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
+                                    + "before you can log in.";
+
+                    return View("Info");
+                    //return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
@@ -182,7 +212,13 @@ namespace CarrerCloudV2.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (result.Succeeded)
+            {
+                
+                return View("ConfirmEmail");
+            }
+
+            return View("Error");
         }
 
         //
@@ -401,6 +437,19 @@ namespace CarrerCloudV2.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+
+        //mikky
+        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+        {
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account",
+               new { userId = userID, code = code }, protocol: Request.Url.Scheme);
+          //  await UserManager.SendEmailAsync(userID, subject,
+             //  "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            return callbackUrl;
         }
 
         protected override void Dispose(bool disposing)

@@ -1,87 +1,106 @@
-﻿@model CarrerCloudV2.Models.IndexViewModel
+﻿@using CareerCloud.Pocos;
+@model CarrerCloudV2.Models.IndexViewModel
 @{
     ViewBag.Title = "Manage";
+    
+    ApplicantProfilePoco poco = ViewBag.poco;
+   
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
-            @if (Model.HasPassword)
-            {
-                @Html.ActionLink("Change your password", "ChangePassword")
-            }
-            else
-            {
-                @Html.ActionLink("Create", "SetPassword")
-            }
-            ]
-        </dd>
-        <dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>
-        @*
-            Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-             
-             See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-             
-             Uncomment the following block after you have set up two-factor authentication
-        *@
-        @*  
-            <dt>Phone Number:</dt>
-            <dd>
-                @(Model.PhoneNumber ?? "None")
-                @if (Model.PhoneNumber != null)
-                {
-                    <br />
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-                    using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <section>
+                    <p>Change your account settings</p>
+                    [
+                    @if (Model.HasPassword)
                     {
-                        @Html.AntiForgeryToken()
-                        <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+                        @Html.ActionLink("Change your password", "ChangePassword")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword")
+                    }
+                    ]
+
+                    <section>
+                        @Html.Partial("_ApplicantProfile", poco)
+                    </section>
+                </section>
+            </div>
+            <div class="col-md-6">
+                <section>
+                    <p>Education</p>
+                    @{
+                        IEnumerable<ApplicantEducationPoco> edu = poco.ApplicantEducations;
+                        if (edu == null || edu.Count() == 0)
+                        {
+                            @:Please add your Education <br />
+                            <button class="btn-light">@Html.ActionLink("Enter Education", "NewEducation", "ApplicantEducation", new { id = poco.Id }, null)</button>
+
+                        }
+                        else
+                        {
+                            @Html.Partial("_ApplicantEducation", edu)
+                            <button class="btn-light">@Html.ActionLink("Add", "NewEducation", "ApplicantEducation", new { id = poco.Id }, null)</button>
+                        }
+                    }
+                    <hr />
+                </section>
+                <p>Skills</p>
+                @{
+                    IEnumerable<ApplicantSkillPoco> skill = poco.ApplicantSkills;
+                    if (skill == null || skill.Count() == 0)
+                    {
+                        @:Please add your Skills <br />
+                        <button class="btn-light">@Html.ActionLink("Add Skill", "NewSkill", "ApplicantSkill", new { id = poco.Id }, null)</button>
+
+                    }
+                    else
+                    {
+                        @Html.Partial("_ApplicantSkills", skill)
+                        <button class="btn-light">@Html.ActionLink("Add", "NewSkill", "ApplicantSkill", new { id = poco.Id }, null)</button>
                     }
                 }
-                else
-                {
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
-                }
-            </dd>
-        *@
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication.
-            </p>
-            @*@if (Model.TwoFactor)
-                {
-                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>Enabled
-                        <input type="submit" value="Disable" class="btn btn-link" />
-                        </text>
+                <hr />
+                <section>
+                    <p>Resume</p>
+                    @{
+                        IEnumerable<ApplicantResumePoco> resume = poco.ApplicantResumes;
+                        if (resume == null || resume.Count() == 0)
+                        {
+                            @:Please add your Resume <br />
+                            <button class="btn-light">@Html.ActionLink("Add Resume", "NewResume", "ApplicantResume", new { id = poco.Id }, null)</button>
+
+                        }
+                        else
+                        {
+                            @Html.Partial("_ApplicantResume", resume)
+                            <button class="btn-light">@Html.ActionLink("Add", "NewResume", "ApplicantResume", new { id = poco.Id }, null)</button>
+                        }
                     }
-                }
-                else
-                {
-                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>Disabled
-                        <input type="submit" value="Enable" class="btn btn-link" />
-                        </text>
-                    }
-                }*@
-        </dd>
-    </dl>
+                </section>
+
+
+            </div>
+        </div><hr />
+              
+        
+
+    </div>
+    <div class="container">
+        <h2>Applied Jobs</h2>
+    
+            
+                @Html.Action("Applications","ApplicantProfile", new { id=poco.Id});
+                
+       
+    </div>
+    
+    
+
 </div>

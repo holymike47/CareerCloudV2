@@ -1,0 +1,132 @@
+﻿@model CarrerCloudV2.Models.CompanyJobViewModel
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model=>model.DescId)
+
+    <div class="form-horizontal">
+        <h4>Edit</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Company)
+        @Html.HiddenFor(model=>model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea style="width:80%;" name="@nameof(Model.Description)" id="@nameof(Model.Description)">@Model.Description</textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <h3>Skills</h3>
+
+            <table class="table table-borderless table-light table-">
+                <tr>
+                    <th>Skill</th>
+                    <th>Skill Level</th>
+                    <th>Importance</th>
+                </tr>
+
+                @{ 
+                    string[] s = { Model.Skill1, Model.Skill2, Model.Skill3, Model.Skill4, Model.Skill5 };
+                    int[] sl = { Model.SkillLevel1, Model.SkillLevel2, Model.SkillLevel3, Model.SkillLevel4, Model.SkillLevel5};
+                    int[] im = { Model.Importance1, Model.Importance2, Model.Importance3, Model.Importance4, Model.Importance5};
+                }
+
+
+                @for (int i = 0; i < s.Length; i++)
+                {
+                    var ns = "Skill" + (i+1);
+                    var nsl = "SkillLevel" + (i+1);
+                    var nim = "Importance" + (i+1);
+
+                  <tr>
+                        <td><input name="@ns" value="@s[i]" /></td>
+                        <td>
+                            <input type="radio" name="@nsl" value="1" @if(sl[i]==1){<text>checked</text>} />
+                            <input type="radio" name="@nsl" value="2" @if(sl[i]==2){<text>checked</text>}/>
+                            <input type="radio" name="@nsl" value="3" @if(sl[i]==3){<text>checked</text>}/>
+                            <input type="radio" name="@nsl" value="4" @if(sl[i]==4){<text>checked</text>}/>
+                            <input type="radio" name="@nsl" value="5" @if(sl[i]==5){<text>checked</text>}/>
+                        </td>
+                        <td>
+                            <input type="radio" name="@nim" value="1" @if(im[i]==1){<text>checked</text>} />
+                            <input type="radio" name="@nim" value="2" @if(im[i]==2){<text>checked</text>}/>
+                            <input type="radio" name="@nim" value="3" @if(im[i]==3){<text>checked</text>}/>
+                            <input type="radio" name="@nim" value="4" @if(im[i]==4){<text>checked</text>}/>
+                            <input type="radio" name="@nim" value="5" @if(im[i]==5){<text>checked</text>}/>
+                        </td>
+                    </tr>
+
+
+
+
+                }
+
+            </table>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <h3>Major</h3>
+            <table class="table table-borderless table-light table-">
+                <tr>
+                    <th>Major</th>
+                    <th>Importance</th>
+                </tr>
+
+                @{ 
+                    string[] m = { Model.Major1, Model.Major2, Model.Major3, Model.Major4, Model.Major5 };
+                    int[] mi = { Model.MajorImportance1, Model.MajorImportance2, Model.MajorImportance3,
+                    Model.MajorImportance4,Model.MajorImportance5};
+                }
+                @for (int i = 0;i< m.Length; i++)
+                {
+                    var nm = "Major" + (i+1);
+                    var nmi = "MajorImportance" + (i+1);
+                   <tr>
+                        <td><input name="@nm" value="@m[i]"/></td>
+                        <td>
+                            <input type="radio" name="@nmi" value="1" @if(mi[i]==1){<text>checked</text>}/>
+                            <input type="radio" name="@nmi" value="2" @if(mi[i]==2){<text>checked</text>}/>
+                            <input type="radio" name="@nmi" value="3" @if(mi[i]==3){<text>checked</text>}/>
+                            <input type="radio" name="@nmi" value="4" @if(mi[i]==4){<text>checked</text>}/>
+                            <input type="radio" name="@nmi" value="5" @if(mi[i]==5){<text>checked</text>}/>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-dark" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

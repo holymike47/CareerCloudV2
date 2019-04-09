@@ -1,0 +1,39 @@
+﻿@model CareerCloud.Pocos.CompanyDescriptionPoco
+
+<div>
+    <h4>Company Description</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SystemLanguageCode.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SystemLanguageCode.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyDescription)
+        </dd>
+
+        
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", "CompanyDescription", new { id = Model.Id },null) 
+   
+</p>
